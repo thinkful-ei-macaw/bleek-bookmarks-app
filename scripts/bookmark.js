@@ -4,21 +4,36 @@ import STORE from './store.js';
 
 const render = () => {
   let html = renderForm();
-  html+= STORE.bookmarks.map(item => renderItem(item));
+  html+= STORE.bookmarks.map(item => { 
+    if(item.expanded){
+      return renderExpandedItem(item);
+    }else{
+      return renderItem(item);
+    }
+  });
   $('main').html(html);
 };
 
 function bindEventListeners () {
   $('body').on('click', '.expand', event =>{
+    console.log('hi');
     const button = $(event.target);
     const id = button.data('id');
+    const item = STORE.findById(id);
+    if(item.expanded){
+      item.expanded = false;
+    } else {
+      item.expanded = true;
+    }
+    this.render();
   });
   $('body').on('click', '.delete', event =>{
     const button = $(event.target);
     const id = button.data('id');
     api.deleteBookmark(id)
       .then(data => {
-        ST;
+        STORE.findAndDelete(id);
+        this.render();
       });
   });
   $('body').on('submit', 'form', event => {
@@ -39,6 +54,7 @@ function bindEventListeners () {
 
 function renderForm () {
   return `
+  <h1>Brandon's Bookmark WebApp</h1>
     <form id="js-add-bookmark-form">
         <div class="form-group">
           <label for="title">Title</label>
@@ -75,7 +91,7 @@ function renderItem (item) {
       <h2>${item.title}</h2> 
       <a>${item.url}</a>
       <span>${item.rating}</span>
-      <button data-id=${item.id} class='expand'>Expand</button>
+      <button type="button" data-id="${item.id}" class='expand'>Expand</button>
     </li>
     `;
 } 
@@ -87,11 +103,12 @@ function renderExpandedItem (item) {
       <a>${item.url}</a>
       <span>${item.rating}</span>
       <p>${item.desc}</p>
-      <button data-id=${item.id} class='submit'>Delete</button>
+      <button type="button" data-id="${item.id}" class='expand'>Collapse</button>
+      <button type="button" data-id="${item.id}" class='delete'>Delete</button>
     </li>
     `;
 } 
 export default{
   render,
-  bindEventListeners,
+  bindEventListeners
 };

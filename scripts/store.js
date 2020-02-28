@@ -1,6 +1,5 @@
 'use strict';
 
-
 function setErr (error) {
   this.error = error;
 };
@@ -26,7 +25,7 @@ function findAndDelete (id) {
 
 export default {
   bookmarks: [],
-  minRating: 0,
+  minRating: 1,
   setErr,
   addBookmark,
   findById,

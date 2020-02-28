@@ -1,0 +1,15 @@
+* {
+    box-sizing: border-box;
+}
+
+.form {
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.li {
+    text-align: center;
+}
