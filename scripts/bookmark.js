@@ -1,10 +1,14 @@
 //'use strict';
 import api from './api.js';
 import STORE from './store.js';
+import store from './store.js';
 
 const render = () => {
   let html = renderForm();
   html+= STORE.bookmarks.map(item => { 
+    if(item.rating < store.minRating){
+      return;
+    }
     if(item.expanded){
       return renderExpandedItem(item);
     }else{
@@ -16,7 +20,6 @@ const render = () => {
 
 function bindEventListeners () {
   $('body').on('click', '.expand', event =>{
-    console.log('hi');
     const button = $(event.target);
     const id = button.data('id');
     const item = STORE.findById(id);
@@ -50,6 +53,11 @@ function bindEventListeners () {
         this.render();
       });
   });
+  $('body').on('change', '.display-by-rating', event => {
+    event.preventDefault();
+    store.minRating = event.target.value;
+    this.render();
+  })
 }
 
 function renderForm () {
@@ -80,7 +88,17 @@ function renderForm () {
         </div>
         <div>
         <button type="submit" class="btn-add-bookmark-button">Submit</button>
-        </div>  
+        </div>
+        <div>
+        <select class="display-by-rating" aria-label="rating-dropdown">
+          <option value="0" >No Filter</option>
+          <option id="one" value="1">1 Star</option>
+          <option id="two" value="2">2 Stars</option>
+          <option id="three" value="3">3 Stars</option>
+          <option id="four" value="4">4 Stars</option>
+          <option id="five" value="5">5 Stars</option>
+        </select>
+        </div>
       </form>   
     `;
 }
@@ -89,12 +107,12 @@ function renderItem (item) {
   return `
     <li>
       <h2>${item.title}</h2> 
-      <a>${item.url}</a>
+      <a href="${item.url}" target="_new">${item.url}</a>
       <span>${item.rating}</span>
       <button type="button" data-id="${item.id}" class='expand'>Expand</button>
     </li>
     `;
-} 
+}
 
 function renderExpandedItem (item) {
   return `
@@ -107,7 +125,8 @@ function renderExpandedItem (item) {
       <button type="button" data-id="${item.id}" class='delete'>Delete</button>
     </li>
     `;
-} 
+}
+
 export default{
   render,
   bindEventListeners
