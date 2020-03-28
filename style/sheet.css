@@ -2,14 +2,32 @@
     box-sizing: border-box;
 }
 
-.form {
-    
+main {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
 }
 
-.li {
-    text-align: center;
+h1 {
+    font-style: italic;
+    font-family: sans-serif;
+    color: darkblue;
+    margin: 40px;
+    padding: 30px;
+    border-color: azure;
+    border: groove;
+}
+
+h2 {
+    text-align: left;
+    font-family: sans-serif;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    list-style: none;
 }
